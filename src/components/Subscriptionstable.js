@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Edit2Icon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useState,useEffect } from 'react';
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -21,11 +22,39 @@ const rows = [
 ];
 
 export default function Subscriptionstable() {
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
-    const HandleClick = () => {
-      // const navigate = useNavigate();
-      navigate('/Subscriptionsdetails');
-    };
+  const Subscriptionid=useState({id:1});
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`/api/SubscriptionsDetails/`,{
+      
+          method: 'GET' 
+    
+      }); // featching the data from server
+      const result = await response.json();
+     // Add this line to check the structure of the result
+      if (result.status === 'success') {
+        setData([...result.data]); // Update to use result.data
+      } else {
+        console.error('API request failed:', result.message);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  
+  useEffect(() => {
+    fetchData();
+    
+  }, []);
+
+  const handleEditClick = async (id) => {
+     navigate(`/Subscriptionsdetails/${id}`)
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -40,18 +69,18 @@ export default function Subscriptionstable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data.map((row) => (
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.subscriptionid}
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right"><button onClick={() => HandleClick()}><Edit2Icon/></button></TableCell>
+              <TableCell align="right">{row.subscription}</TableCell>
+              <TableCell align="right">{row.duration}</TableCell>
+              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell align="right"><button onClick={() => handleEditClick(row.subscriptionid)}><Edit2Icon/></button></TableCell>
 
             </TableRow>
           ))}

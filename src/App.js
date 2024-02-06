@@ -21,7 +21,9 @@ function App() {
     <Router>
       <Routes>
         
+        <Route path="/agrovenom" element={<Login/>} />
         <Route path="" element={<Login/>} />
+
         <Route path="/Home" element={<Home/>} />
         <Route path="/farmers" element={<Farmers/>} />
         <Route path="/Farmersdetails/:businessid" element={<Farmersdetails/>} />
@@ -30,7 +32,7 @@ function App() {
         <Route path="/Usersdetails/:mobileno/:androidid" element={<Usersdetails/>} />
 
         <Route path="/Subscriptions" element={<Subscriptions/>} />
-        <Route path="/Subscriptionsdetails" element={<Subscriptionsdetails/>} />
+        <Route path="/Subscriptionsdetails/:subscriptionid" element={<Subscriptionsdetails/>} />
 
         <Route path="/Login" element={<Login/>} />
         <Route path="/Logout" element={<Logout/>} />
