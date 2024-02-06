@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,42 +10,47 @@ import EditIcon from '@mui/icons-material/Edit';
 import PeopleIcon from '@mui/icons-material/People';
 import { useNavigate } from 'react-router-dom';
 
-// const RedirectButton = () => {
-//   const navigate = useNavigate();
-// }
-//   const HandleClick = () => {
-//     navigate('/Farmersdetails.js');
-//   };
+function BasicTable() {
+  const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('1000118', 'pk', 6946494949, 0, 'Trial'),
-  createData('1000118', 'pk', 6946494949, 0, 'Trial'),
-  createData('1000118', 'pk', 6946494949, 0, 'Trial'),
-  createData('1000118', 'pk', 6946494949, 0, 'Trial'),
-  createData('1000118', 'pk', 6946494949, 0, 'Trial'),
-  createData('1000118', 'pk', 6946494949, 0, 'Trial'),
-];
-
-export default function BasicTable() {
-    // const navigate = useNavigate();
-    const navigate = useNavigate();
-
-    const HandleClick = () => {
-      // const navigate = useNavigate();
-      navigate('/Farmersdetails');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/BusinessDetails/'); // featching the data from server
+        const result = await response.json();
+        console.log(result); // Add this line to check the structure of the result
+        if (result.status === 'success') {
+          setData(result.data); // Update to use result.data
+        } else {
+          console.error('API request failed:', result.message);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
 
-    const send = useNavigate();
+    fetchData();
+  }, []);
 
-    const HandleClick2 = () => {
-      // const navigate = useNavigate();
-      navigate('/Users');
-    };
+  const handleEditClick = async (businessId) => {
+    try {
+      const response = await fetch(`/api/BusinessDetails/${businessId}/`);
+      const result = await response.json();
+      if (result.status === 'success') {
+        // Navigate to Farmersdetails component with the fetched data
+        navigate(`/Farmersdetails/${businessId}`, { state: { formData: result.data } });
+      } else {
+        console.error('API request failed:', result.message);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
+  const handlePeopleClick = (businessId) => {
+    navigate(`/Users/${businessId}`);
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -58,24 +63,30 @@ export default function BasicTable() {
             <TableCell align="right">Multiuser</TableCell>
             <TableCell align="right">Status</TableCell>
             <TableCell align="right">Action</TableCell>
-
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.businessid}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.businessid}
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-              <TableCell align="right"><button onClick={() => HandleClick()}><EditIcon/></button>&nbsp;<button onClick={() => HandleClick2()}><PeopleIcon/></button></TableCell>
-
+              <TableCell align="right">{row.businessname}</TableCell>
+              <TableCell align="right">{row.contactno}</TableCell>
+              <TableCell align="right">{row.multiuser}</TableCell>
+              <TableCell align="right">{row.status}</TableCell>
+              <TableCell align="right">
+                <button onClick={() => handleEditClick(row.businessid)}>
+                  <EditIcon />
+                </button>
+                &nbsp;
+                <button onClick={() => handlePeopleClick(row.businessid)}>
+                  <PeopleIcon />
+                </button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -83,3 +94,5 @@ export default function BasicTable() {
     </TableContainer>
   );
 }
+
+export default BasicTable;
