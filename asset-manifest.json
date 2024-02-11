@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Agrovenom/static/css/main.b1d7ec7b.css",
+    "main.js": "/Agrovenom/static/js/main.5c779ca3.js",
+    "static/js/787.0af085ad.chunk.js": "/Agrovenom/static/js/787.0af085ad.chunk.js",
+    "static/media/icon.png": "/Agrovenom/static/media/icon.a844abd7943179f2eeac.png",
+    "index.html": "/Agrovenom/index.html",
+    "main.b1d7ec7b.css.map": "/Agrovenom/static/css/main.b1d7ec7b.css.map",
+    "main.5c779ca3.js.map": "/Agrovenom/static/js/main.5c779ca3.js.map",
+    "787.0af085ad.chunk.js.map": "/Agrovenom/static/js/787.0af085ad.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b1d7ec7b.css",
+    "static/js/main.5c779ca3.js"
+  ]
+}
